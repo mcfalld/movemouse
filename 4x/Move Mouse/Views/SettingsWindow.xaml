@@ -396,6 +396,10 @@
                 </TabItem.Header>
                 <Grid>
                     <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="200"/>
                             <ColumnDefinition Width="10"/>
@@ -403,7 +407,32 @@
                             <ColumnDefinition Width="10"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <ListView Grid.Column="0" ItemsSource="{Binding Path=Settings.Actions, NotifyOnTargetUpdated=True}" SelectedItem="{Binding Path=SelectedAction, NotifyOnTargetUpdated=True}" SelectionMode="Single" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0" Background="Transparent" BorderThickness="1" BorderBrush="{StaticResource StandardBorderBrush}">
+                    
+                        <ComboBox Grid.Row="0" Grid.Column="0"
+                                  ItemsSource="{Binding ProfileManager.Profiles}"
+                                  DisplayMemberPath="Name"
+                                  SelectedItem="{Binding SelectedProfile, Mode=TwoWay}"
+                                  Margin="0,0,0,10"
+                                  Width="180"
+                                  VerticalAlignment="Top"
+                                  ToolTip="Select a profile"/>
+
+                        <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Top">
+                            <Button Content="Add" Command="{Binding AddProfileCommand}" Margin="0,0,5,0"/>
+                            <Button Content="Rename" Command="{Binding RenameProfileCommand}" Margin="0,0,5,0" IsEnabled="{Binding SelectedProfile}"/>
+                            <Button Content="Remove" Command="{Binding RemoveProfileCommand}" IsEnabled="{Binding SelectedProfile}"/>
+                        </StackPanel>
+                    
+                        <ListView Grid.Row="1" Grid.Column="0"
+                                  ItemsSource="{Binding Path=Settings.Actions, NotifyOnTargetUpdated=True}"
+                                  SelectedItem="{Binding Path=SelectedAction, NotifyOnTargetUpdated=True}"
+                                  SelectionMode="Single"
+                                  VerticalAlignment="Stretch"
+                                  HorizontalAlignment="Stretch"
+                                  Margin="0"
+                                  Background="Transparent"
+                                  BorderThickness="1"
+                                  BorderBrush="{StaticResource StandardBorderBrush}">
                             <ListView.Resources>
                                 <Style TargetType="ScrollViewer" BasedOn="{StaticResource StandardScrollViewerStyle}"/>
                             </ListView.Resources>

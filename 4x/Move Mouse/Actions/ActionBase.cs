@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 
 namespace ellabi.Actions
 {
+    [Serializable]
     public abstract class ActionBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;

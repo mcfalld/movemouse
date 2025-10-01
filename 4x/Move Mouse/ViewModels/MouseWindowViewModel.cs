@@ -714,19 +714,16 @@ namespace ellabi.ViewModels
                                 CurrentState = MouseState.Locked;
                             }
 
-                            // Check if we should continue running
                             bool shouldContinue = false;
                             if (_activeExecutionId.Equals(executionId))
                             {
                                 StaticCode.Logger?.Here().Debug($"Checking continuation: _firstPass={_firstPass}, CurrentState={CurrentState}");
                                 
-                                // Continue if locked or sleeping (will retry)
                                 if (CurrentState.Equals(MouseState.Locked) || CurrentState.Equals(MouseState.Sleeping))
                                 {
                                     StaticCode.Logger?.Here().Debug("Continuing because locked/sleeping");
                                     shouldContinue = true;
                                 }
-                                // Continue if we have repeating actions
                                 else if (SettingsVm.SelectedProfile.Actions.Any(action => 
                                     action.IsValid && 
                                     action.IsEnabled && 
@@ -746,9 +743,7 @@ namespace ellabi.ViewModels
                             
                             if (shouldContinue)
                             {
-                                // After executing actions, restart the timer properly (this sets Running state, ExecutionTime, and starts countdown)
                                 Application.Current.Dispatcher.Invoke(() => {
-                                    // Calculate next interval (in case it's random)
                                     double nextInterval = SettingsVm.SelectedProfile.RandomInterval ? new Random().Next(SettingsVm.SelectedProfile.LowerInterval * 1000, SettingsVm.SelectedProfile.UpperInterval * 1000) : (SettingsVm.SelectedProfile.LowerInterval * 1000);
                                     nextInterval = nextInterval > 0 ? nextInterval : 1;
                                     ExecutionTime = DateTime.Now.AddMilliseconds(nextInterval);

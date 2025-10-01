@@ -41,7 +41,6 @@ namespace ellabi.ViewModels
             get => _selectedProfile;
             set
             {
-                // Unsubscribe from old profile's property changes
                 if (_selectedProfile != null)
                 {
                     _selectedProfile.PropertyChanged -= SelectedProfile_PropertyChanged;
@@ -50,13 +49,9 @@ namespace ellabi.ViewModels
                 _selectedProfile = value;
                 ProfileManager.SetActiveProfile(value);
                 Settings.Actions = value?.Actions?.ToArray() ?? Array.Empty<ActionBase>();
-                
-                // Profile-specific settings are bound directly to SelectedProfile in the UI
-                // No need to sync to Settings object since UI binds directly to profile properties
                     
                 if (value != null)
                 {
-                    // Subscribe to new profile's property changes
                     value.PropertyChanged += SelectedProfile_PropertyChanged;
                 }
                 
@@ -351,13 +346,9 @@ namespace ellabi.ViewModels
         {
             try
             {
-                // Prevent infinite loop when we're updating the profile
                 if (_isUpdatingProfile) return;
                 
                 StaticCode.Logger?.Here().Debug($"Profile property changed: {e.PropertyName}");
-                
-                // Only save profiles to disk - don't sync from Settings again as that would cause infinite loop
-                // The sync from Settings to Profile happens in SaveSettings() when Settings change
                 ProfileManager.SaveProfiles(ProfileFilePath);
             }
             catch (Exception ex)
@@ -372,16 +363,11 @@ namespace ellabi.ViewModels
 
             try
             {
-                // Profile-specific settings are bound directly to SelectedProfile
-                // No need to sync from Settings since UI updates SelectedProfile directly
-                
-                // Save the main settings file
                 var xs = new XmlSerializer(typeof(Settings));
                 var sw = new StreamWriter(StaticCode.SettingsXmlPath, false);
                 xs.Serialize(sw, settings);
                 sw.Close();
                 
-                // Also save profiles to persist profile-specific settings
                 ProfileManager.SaveProfiles(ProfileFilePath);
             }
             catch (Exception ex)
@@ -432,21 +418,10 @@ namespace ellabi.ViewModels
             ProfileManager.SaveProfiles(ProfileFilePath);
         }
 
-        /// <summary>
-        /// Creates an independent copy of an action for profile use
-        /// </summary>
-        /// <param name="sourceAction">The action to copy</param>
-        /// <returns>A new action instance with the same properties but different ID</returns>
         private ActionBase CreateActionCopy(ActionBase sourceAction)
         {
             return sourceAction.Clone();
         }
-
-        /// <summary>
-        /// This method was removed to prevent overwriting profile values with Settings defaults
-        /// Profile-specific settings are now bound directly to SelectedProfile in the UI
-        /// </summary>
-        // private void SyncSettingsToProfile() - REMOVED
 
         public void AddAction(Type actionType)
         {

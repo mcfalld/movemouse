@@ -396,7 +396,7 @@
                 </TabItem.Header>
                 <StackPanel Orientation="Vertical">
                     <!-- Profile Management Section -->
-                    <Grid Margin="0,0,0,10">
+                    <Grid Margin="10,10,0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="200"/>
                             <ColumnDefinition Width="20"/>
@@ -435,8 +435,8 @@
                                 SelectionMode="Single"
                                 VerticalAlignment="Top"
                                 HorizontalAlignment="Stretch"
-                                Height="300"
-                                Margin="0"
+                                Height="340"
+                                Margin="10,0,0,10"
                                 Background="Transparent"
                                 BorderThickness="1"
                                 BorderBrush="{StaticResource StandardBorderBrush}">

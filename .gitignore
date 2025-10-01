@@ -13,3 +13,7 @@ obj/
 *.user
 *.suo
 *.vs
+.vscode/
+profiles.xml
+4x/profiles.xml
+test_profiles.xml
